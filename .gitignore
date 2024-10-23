@@ -41,7 +41,7 @@ build/Release
 # Dependency directories
 node_modules/
 jspm_packages/
-app/src/mysql/
+app/src/mysql/mysql.js
 
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
