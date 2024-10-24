@@ -42,7 +42,7 @@ build/Release
 node_modules/
 jspm_packages/
 MySQL/
-app/src/mysql/mysql.js
+app/src/config/db.js
 
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/

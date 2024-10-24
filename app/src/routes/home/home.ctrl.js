@@ -1,6 +1,6 @@
 "use strict";
 
-const User = require("../../mysql/User");
+const User = require("../../models/User");
 
 // Get 요청 처리
 const output = {
@@ -15,7 +15,7 @@ const output = {
     },
 };
 
-// Put 요청 처리
+// Post 요청 처리
 const process = {
     login: async (req, res) => {
         const user = new User(req.body);
