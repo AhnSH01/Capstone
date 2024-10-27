@@ -9,7 +9,7 @@ class UserStorage {
 
             db.query(query, [id], (error, results, fields) => {
                 if (error) reject(error);
-                resolve(results[0]);
+                else resolve(results[0]);
             })
         })
     }
@@ -20,7 +20,7 @@ class UserStorage {
 
             db.query(query, [userInfo.id, userInfo.name, userInfo.password], (error, results, fields) => {
                 if (error) reject(error);
-                resolve({ success: true , msg: "회원가입 성공"});
+                else resolve({ success: true , msg: "회원가입 성공"});
             })
         })
     }

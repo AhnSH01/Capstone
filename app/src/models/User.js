@@ -22,7 +22,7 @@ class User {
                 return { success: false, msg: "찾을 수 없는 ID 입니다." };
             }
         } catch (error) {
-            return { success: false, msg: error };
+            return { success: false, error };
         }
     }
 
@@ -33,7 +33,7 @@ class User {
             return await UserStorage.save(client);
         } catch (error) {
             if (error.errno == 1062) return { success: false, msg: "이미 존재하는 ID입니다." };
-            else return { success: false, msg: error };
+            else return { success: false, error };
         }
 
     }
