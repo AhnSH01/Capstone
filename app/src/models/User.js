@@ -9,6 +9,21 @@ class User {
         this.body = body;
     }
 
+    async getUser() {
+        const client = this.body;
+
+        try {
+            const token = client.accessToken;
+            const user = jwt.verify(token, process.env.ACCESS_SECRET);
+            const userInfo = await UserStorage.getUserInfo(user.login_id);
+            const { password, ...others } = userInfo;
+
+            return { success: true, others };
+        } catch (error) {
+            return { success: false, error };
+        }
+    }
+
     async login() {
         const client = this.body;
         try {
@@ -23,7 +38,7 @@ class User {
                             login_id: user.login_id,
                             name: user.name,
                         }, process.env.ACCESS_SECRET, {
-                            expiresIn: '1m',
+                            expiresIn: '5m',
                             issuer: 'About Tech',
                         });
 
@@ -92,7 +107,7 @@ class User {
                 login_id: user.login_id,
                 name: user.name,
             }, process.env.ACCESS_SECRET, {
-                expiresIn: '1m',
+                expiresIn: '5m',
                 issuer: 'About Tech',
             });
 

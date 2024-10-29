@@ -4,7 +4,7 @@ const logger = require("../../config/logger");
 const User = require("../../models/User");
 
 // Get 요청 처리
-const output = {
+const _read = {
     home: (req, res) => {
         logger.info(`GET / 304 "홈 화면으로 이동"`);
         res.render("home/index");
@@ -35,13 +35,18 @@ const output = {
 
         return res.json(response);
     },
+    user: async (req, res) => {
+        const user = new User(req.cookies);
+        const response = await user.getUser();
+        return res.json(response);
+    },
     // loginSuccess: (req, res) => {
 
     // },
 };
 
 // Post 요청 처리
-const process = {
+const _create = {
     login: async (req, res) => {
         const user = new User(req.body);
         const response = await user.login();
@@ -90,11 +95,6 @@ const process = {
     },
 };
 
-module.exports = {
-    output,
-    process,
-};
-
 const log = (response, url) => {
     if (response.error) {
         logger.error(
@@ -106,4 +106,39 @@ const log = (response, url) => {
             `${url.method} ${url.path} ${url.status} "Response: { success: ${response.success}, msg: ${response.msg} }"`
         );
     }
+};
+
+// Patch 요청 처리
+const _update = {
+    password: (req, res) => {
+        logger.info(`Patch /user/password 200 "user.password 정보 변경 완료"`);
+    },
+    name: (req, res) => {
+        logger.info(`Patch /user/name 200 "user.name 정보 변경 완료"`);
+    },
+    adress: (req, res) => {
+        logger.info(`Patch /user/adress 200 "user.adress 정보 변경 완료"`);
+    },
+    phone_number: (req, res) => {
+        logger.info(`Patch /user/phone_number 200 "user.phone_number 정보 변경 완료"`);
+    },
+    gender: (req, res) => {
+        logger.info(`Patch /user/gender 200 "user.gender 정보 변경 완료"`);
+    },
+    age: (req, res) => {
+        logger.info(`Patch /user/age 200 "user.age 정보 변경 완료"`);
+    },
+};
+
+// Delete 요청 처리
+const _delete = {
+    
+};
+
+
+module.exports = {
+    _read,
+    _create,
+    _update,
+    _delete,
 };
