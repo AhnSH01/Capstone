@@ -17,14 +17,14 @@ const _read = {
         logger.info(`GET /register 304 "회원가입 화면으로 이동"`);
         res.render("home/register");
     },
-    accesstoken: async (req, res) => {
-        const user = new User(req.cookies);
-        const response = await user.accessToken();
+    accesstoken: (req, res) => {
+        const user = new User(req.query);
+        const response = user.accessToken();
         return res.json(response);
     },
-    refreshtoken: async (req, res) => {
-        const user = new User(req.cookies);
-        const response = await user.refreshToken();
+    refreshtoken: (req, res) => {
+        const user = new User(req.query);
+        const response = user.refreshToken();
 
         if (response.success) {
             res.cookie("accessToken", response.accessToken, {
@@ -35,8 +35,8 @@ const _read = {
 
         return res.json(response);
     },
-    user: async (req, res) => {
-        const user = new User(req.cookies);
+    user: async (req, res) => {  // http://localhost:3000/user?accessToken=토큰값
+        const user = new User(req.query);
         const response = await user.getUser();
         return res.json(response);
     },

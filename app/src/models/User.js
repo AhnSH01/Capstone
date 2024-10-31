@@ -26,6 +26,10 @@ class User {
 
     async login() {
         const client = this.body;
+
+        if (!client.id) return { success: false, msg: "아이디를 입력해주세요." };
+        if (!client.password) return { success: false, msg: "비밀번호를 입력해주세요." };
+
         try {
             const user = await UserStorage.getUserInfo(client.id);
 
@@ -38,7 +42,7 @@ class User {
                             login_id: user.login_id,
                             name: user.name,
                         }, process.env.ACCESS_SECRET, {
-                            expiresIn: '5m',
+                            expiresIn: '365d',
                             issuer: 'About Tech',
                         });
 
@@ -69,6 +73,9 @@ class User {
 
     async register() {
         const client = this.body;
+
+        if (!client.id) return { success: false, msg: "아이디를 입력해주세요." };
+        if (client.password !== client.confirm_password) return { success: false, msg: "비밀번호가 일치하지 않습니다." };
 
         try {
             const salt = await bcrypt.genSalt(10);
@@ -111,7 +118,7 @@ class User {
                 issuer: 'About Tech',
             });
 
-            return { success: true, user , accessToken };
+            return { success: true, user, accessToken };
         } catch (error) {
             return { success: false, error };
         }
