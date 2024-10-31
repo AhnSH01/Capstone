@@ -19,8 +19,8 @@ app.use(express.static(`${__dirname}/src/public`));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors({
-    origin: "http://localhost:3000",
-    methods: ['GET', 'POST'],
+    origin: process.env.CORS_ORIGIN,
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
     Credentials: true,
 }));
 
