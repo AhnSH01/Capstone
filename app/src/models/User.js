@@ -30,7 +30,7 @@ class User {
             const user = await UserStorage.getUserInfo(client.id);
 
             if (user) {
-                if (user.login_id === client.id && bcrypt.compare(client.password, user.password)) {
+                if (user.login_id === client.id && await bcrypt.compare(client.password, user.password)) {
                     try {
                         // access token 발급
                         const accessToken = jwt.sign({
