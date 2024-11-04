@@ -17,6 +17,10 @@ const _read = {
         logger.info(`GET /register 304 "회원가입 화면으로 이동"`);
         res.render("home/register");
     },
+    updatePassword: (req, res) => {
+        logger.info(`GET /updatePassword 304 "비밀번호 변경 화면으로 이동"`);
+        res.render("home/updatePassword");
+    },
     accesstoken: (req, res) => {
         const user = new User(req.query);
         const response = user.accessToken();
@@ -110,23 +114,22 @@ const log = (response, url) => {
 
 // Patch 요청 처리
 const _update = {
-    password: (req, res) => {
-        logger.info(`Patch /user/password 200 "user.password 정보 변경 완료"`);
+    password: async (req, res) => {
+        // const user = new User(req.body);
+        const user = new User(req);
+        const response = await user.updatePassword();
+
+        const url = {
+            method: "Patch",
+            path: "/user/password",
+            // status: response.error ? 409 : 201,
+        };
+
+        log(response, url);
+        return res.status(url.status).json(response);
     },
-    name: (req, res) => {
-        logger.info(`Patch /user/name 200 "user.name 정보 변경 완료"`);
-    },
-    adress: (req, res) => {
-        logger.info(`Patch /user/adress 200 "user.adress 정보 변경 완료"`);
-    },
-    phone_number: (req, res) => {
-        logger.info(`Patch /user/phone_number 200 "user.phone_number 정보 변경 완료"`);
-    },
-    gender: (req, res) => {
-        logger.info(`Patch /user/gender 200 "user.gender 정보 변경 완료"`);
-    },
-    age: (req, res) => {
-        logger.info(`Patch /user/age 200 "user.age 정보 변경 완료"`);
+    user: async (req, res) => {
+        logger.info(`Patch /user/name 200 "user 정보 변경 완료"`);
     },
 };
 

@@ -24,6 +24,15 @@ class UserStorage {
             })
         })
     }
+
+    static updatePassword(id, new_password) {
+        let query = "update user set password = ? where id = ?;";
+
+        db.query(query, [new_password, id], (error, results, fields) => {
+            if (error) reject(error);
+            else resolve({ success: true , msg: "비밀번호 변경 완료"});
+        })
+    }
 }
 
 module.exports = UserStorage;

@@ -114,11 +114,45 @@ class User {
                 login_id: user.login_id,
                 name: user.name,
             }, process.env.ACCESS_SECRET, {
-                expiresIn: '5m',
+                expiresIn: '365d',
                 issuer: 'About Tech',
             });
 
             return { success: true, user, accessToken };
+        } catch (error) {
+            return { success: false, error };
+        }
+    }
+
+    async updatePassword() {
+        // const client = this.body; //accessToken, pre_password, new_password, confirm_password
+        const client = this.body.body;
+
+        if (!client.pre_password) return { success: false, msg: "기존 비밀번호를 입력해주세요." };
+        if (!client.new_password) return { success: false, msg: "새 비밀번호를 입력해주세요." };
+        if (client.new_password !== client.confirm_password) return { success: false, msg: "새 비밀번호가 일치하지 않습니다." };
+
+        try {
+            const token = this.body.cookies.accessToken;
+            const payload = jwt.verify(token, process.env.ACCESS_SECRET);
+            const user = await UserStorage.getUserInfo(payload.login_id);
+
+            if (user) {
+                if (await bcrypt.compare(client.pre_password, user.password)) {
+                    try { // 비밀번호 업데이트
+                        const salt = await bcrypt.genSalt(10);
+                        const new_password = await bcrypt.hash(client.new_password, salt);
+
+                        return await UserStorage.updatePassword(user.id, new_password);
+                    } catch (error) {
+                        return { success: false, error };
+                    }
+                } else {
+                    return { success: false, msg: "기존 비밀번호가 틀렸습니다." };
+                }
+            } else {
+                return { success: false, msg: "찾을 수 없는 ID 입니다. (유효하지않은 토큰)" };
+            }
         } catch (error) {
             return { success: false, error };
         }
