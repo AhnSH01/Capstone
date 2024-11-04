@@ -7,18 +7,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- express.static(`${__dirname}/src/public` 루트 경로 -->
-    <script src="/js/home/updatePassword.js" async></script>
+    <script src="/js/home/updateUser.js" async></script>
     <link rel="stylesheet" href="/css/home/login.css">
     <title>Document</title>
 </head>
 <body>
     <div class="login-page">
         <div class="form">
-          <form class="login-form">
+          <form class="login-form"> 
+            <!-- login-id, name, adress, phone-number, gender, age -->
             <input id="token" type="text" placeholder="액세스 토큰"/>
-            <input id="pre-password" type="text" placeholder="기존 비밀번호"/>
-            <input id="new-password" type="text" placeholder="새 비밀번호"/>
-            <input id="confirm-password" type="text" placeholder="새 비밀번호 확인"/>
+            <input id="login-id" type="text" placeholder="login-id"/>
+            <input id="name" type="text" placeholder="name"/>
+            <input id="adress" type="text" placeholder="adress"/>
+            <input id="phone-number" type="text" placeholder="phone-number"/>
+            <input id="gender" type="text" placeholder="gender"/>
+            <input id="age" type="text" placeholder="age"/>
             <p id="button">SIGN UP</p>
             <p class="message">Already registered? <a href="/login">login</a></p>
           </form>

@@ -1,6 +1,7 @@
 "use strict";
 
-const pre_password = document.querySelector("#pre-password"),
+const accessToken = document.querySelector("#token"),
+    pre_password = document.querySelector("#pre-password"),
     new_password = document.querySelector("#new-password"),
     confirm_password = document.querySelector("#confirm-password"),
     Btn = document.querySelector("#button");
@@ -9,6 +10,7 @@ Btn.addEventListener("click", login);
 
 function login() {
     const req = {
+        accessToken: accessToken.value,
         pre_password: pre_password.value,
         new_password: new_password.value,
         confirm_password: confirm_password.value,

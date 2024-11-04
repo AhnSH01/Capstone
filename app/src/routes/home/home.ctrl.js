@@ -3,6 +3,20 @@
 const logger = require("../../config/logger");
 const User = require("../../models/User");
 
+// log 처리
+const log = (response, url) => {
+    if (response.error) {
+        logger.error(
+            `${url.method} ${url.path} ${url.status} "Response: { success: ${response.success}, ${response.error} }"`
+        );
+    }
+    else {
+        logger.info(
+            `${url.method} ${url.path} ${url.status} "Response: { success: ${response.success}, msg: ${response.msg} }"`
+        );
+    }
+};
+
 // Get 요청 처리
 const _read = {
     home: (req, res) => {
@@ -20,6 +34,10 @@ const _read = {
     updatePassword: (req, res) => {
         logger.info(`GET /updatePassword 304 "비밀번호 변경 화면으로 이동"`);
         res.render("home/updatePassword");
+    },
+    updateUser: (req, res) => {
+        logger.info(`GET /updateUser 304 "유저정보 변경 화면으로 이동"`);
+        res.render("home/updateUser");
     },
     accesstoken: (req, res) => {
         const user = new User(req.query);
@@ -44,9 +62,6 @@ const _read = {
         const response = await user.getUser();
         return res.json(response);
     },
-    // loginSuccess: (req, res) => {
-
-    // },
 };
 
 // Post 요청 처리
@@ -99,37 +114,41 @@ const _create = {
     },
 };
 
-const log = (response, url) => {
-    if (response.error) {
-        logger.error(
-            `${url.method} ${url.path} ${url.status} "Response: { success: ${response.success}, ${response.error} }"`
-        );
-    }
-    else {
-        logger.info(
-            `${url.method} ${url.path} ${url.status} "Response: { success: ${response.success}, msg: ${response.msg} }"`
-        );
-    }
-};
-
 // Patch 요청 처리
 const _update = {
     password: async (req, res) => {
-        // const user = new User(req.body);
-        const user = new User(req);
+        const user = new User(req.body);
         const response = await user.updatePassword();
+        console.log(response);
 
         const url = {
             method: "Patch",
             path: "/user/password",
-            // status: response.error ? 409 : 201,
+            status: response.error !== undefined ? 409 : 201,
         };
 
         log(response, url);
         return res.status(url.status).json(response);
     },
     user: async (req, res) => {
-        logger.info(`Patch /user/name 200 "user 정보 변경 완료"`);
+        const user = new User(req.body);
+        const response = await user.updateUser();
+
+        const url = {
+            method: "Patch",
+            path: "/user",
+            status: response.error !== undefined ? 409 : 201,
+        };
+
+        if (response.success) { // 실제론 필요없고 테스트용
+            res.cookie("accessToken", response.accessToken, {
+                secure: false,
+                httpOnly: true,
+            });
+        }
+
+        log(response, url);
+        return res.status(url.status).json(response);
     },
 };
 
@@ -137,7 +156,6 @@ const _update = {
 const _delete = {
     
 };
-
 
 module.exports = {
     _read,

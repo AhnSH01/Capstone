@@ -20,17 +20,30 @@ class UserStorage {
 
             db.query(query, [userInfo.id, userInfo.name, userInfo.password], (error, results, fields) => {
                 if (error) reject(error);
-                else resolve({ success: true , msg: "회원가입 성공"});
+                else resolve({ success: true, msg: "회원가입 성공" });
             })
         })
     }
 
-    static updatePassword(id, new_password) {
-        let query = "update user set password = ? where id = ?;";
+    static async updatePassword(id, new_password) {
+        return new Promise((resolve, reject) => {
+            let query = "update user set password = ? where id = ?;";
 
-        db.query(query, [new_password, id], (error, results, fields) => {
-            if (error) reject(error);
-            else resolve({ success: true , msg: "비밀번호 변경 완료"});
+            db.query(query, [new_password, id], (error, results, fields) => {
+                if (error) reject(error);
+                else resolve({ success: true, msg: "비밀번호 변경 완료" });
+            })
+        })
+    }
+
+    static async updateUser(id, login_id, name, adress, phone_number, gender, age) {
+        return new Promise((resolve, reject) => {
+            let query = "update user set login_id = ?, name = ?, adress = ?, phone_number = ?, gender = ?, age = ? where id = ?;";
+
+            db.query(query, [login_id, name, adress, phone_number, gender, age, id], (error, results, fields) => {
+                if (error) reject(error);
+                else resolve({ success: true });
+            })
         })
     }
 }
