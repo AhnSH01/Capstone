@@ -1,7 +1,7 @@
 "use strict";
 
 const logger = require("../../config/logger");
-const User = require("../../models/User");
+const User = require("../../models/user/User");
 
 // log 처리
 const log = (response, url) => {
