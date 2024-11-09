@@ -16,9 +16,13 @@ class User {
             const token = client.accessToken;
             const user = jwt.verify(token, process.env.ACCESS_SECRET);
             const userInfo = await UserStorage.getUserInfo(user.login_id);
-            const { password, ...others } = userInfo;
 
-            return { success: true, others };
+            if (userInfo) {
+                const { password, ...others } = userInfo;
+                return { success: true, msg: `${user.name}님 정보반환`, others };
+            } else {
+                return { success: false, msg: "유효하지않은 토큰입니다. (존재하지 않는 ID)" };
+            }
         } catch (error) {
             return { success: false, error };
         }
@@ -95,7 +99,7 @@ class User {
         try {
             const token = client.accessToken;
             const user = jwt.verify(token, process.env.ACCESS_SECRET);
-            return { success: true, user };
+            return { success: true, msg: `${user.name}님의 액세스토큰이 유효합니다.`, user };
         } catch (error) {
             return { success: false, error };
         }
@@ -118,7 +122,7 @@ class User {
                 issuer: 'About Tech',
             });
 
-            return { success: true, user, accessToken };
+            return { success: true, msg: `${user.name}님의 리프레쉬토큰이 유효합니다.`, user, accessToken };
         } catch (error) {
             return { success: false, error };
         }
@@ -150,7 +154,7 @@ class User {
                     return { success: false, msg: "기존 비밀번호가 틀렸습니다." };
                 }
             } else {
-                return { success: false, msg: "찾을 수 없는 ID 입니다. (유효하지않은 토큰)" };
+                return { success: false, msg: "유효하지않은 토큰입니다. (존재하지 않는 ID)" };
             }
         } catch (error) {
             return { success: false, error };
@@ -187,7 +191,29 @@ class User {
                     return { success: false, error };
                 }
             } else {
-                return { success: false, msg: "찾을 수 없는 ID 입니다. (유효하지않은 토큰)" };
+                return { success: false, msg: "유효하지않은 토큰입니다. (존재하지 않는 ID)" };
+            }
+        } catch (error) {
+            return { success: false, error };
+        }
+    }
+
+    async deleteUser() {
+        const client = this.body; // accessToken, password
+
+        try {
+            const token = client.accessToken;
+            const payload = jwt.verify(token, process.env.ACCESS_SECRET);
+            const user = await UserStorage.getUserInfo(payload.login_id);
+
+            if (user) {
+                if (await bcrypt.compare(client.password, user.password)) {
+                    return await UserStorage.deleteUser(user.id);
+                } else {
+                    return { success: false, msg: "비밀번호가 틀렸습니다." };
+                }
+            } else {
+                return { success: false, msg: "유효하지않은 토큰입니다. (존재하지 않는 ID)" };
             }
         } catch (error) {
             return { success: false, error };

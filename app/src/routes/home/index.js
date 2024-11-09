@@ -4,7 +4,10 @@ const express = require("express");
 const router = express.Router();
 
 const userCtrl = require("./user.ctrl");
+const optionCtrl = require("./option.ctrl");
 
+// user 관련 API
+// id, login_id, password, adress, name, phone_number, gender, age
 router.get("/", userCtrl._read.home); // 홈페이지 테스트용
 router.get("/login", userCtrl._read.login); // 로그인 테스트용
 router.get("/register", userCtrl._read.register); // 회원가입 테스트용
@@ -20,5 +23,19 @@ router.post("/register", userCtrl._create.register); // 회원가입
 
 router.patch("/user/password", userCtrl._update.password); // 비밀번호 변경
 router.patch("/user", userCtrl._update.user); // 유저정보 변경
+
+router.delete("/user", userCtrl._delete.user); // 유저정보 삭제 (탈퇴)
+
+
+// options 관련 API
+// user_id, push, theme, language
+router.get("/option", optionCtrl._read.option); // options 정보 반환
+
+router.post("/option", optionCtrl._create.option); // options 정보 생성
+
+router.patch("/option", optionCtrl._update.option); // options 정보 변경
+
+// router.delete("/option", optionCtrl._delete.option); // options 정보 삭제
+// options 테이블 user_id가 user의 id 참조하고 있고 설정에서 외래키 삭제시 같이 삭제해놔서 필요없을듯
 
 module.exports = router;

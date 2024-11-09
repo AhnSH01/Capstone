@@ -42,6 +42,14 @@ const _read = {
     accesstoken: (req, res) => {
         const user = new User(req.query);
         const response = user.accessToken();
+
+        const url = {
+            method: "GET",
+            path: "/accesstoken",
+            status: response.error !== undefined ? 409 : 201,
+        };
+
+        log(response, url);
         return res.json(response);
     },
     refreshtoken: (req, res) => {
@@ -55,11 +63,26 @@ const _read = {
             });
         }
 
+        const url = {
+            method: "GET",
+            path: "/refreshtoken",
+            status: response.error !== undefined ? 409 : 201,
+        };
+
+        log(response, url);
         return res.json(response);
     },
     user: async (req, res) => {  // http://localhost:3000/user?accessToken=토큰값
         const user = new User(req.query);
         const response = await user.getUser();
+
+        const url = {
+            method: "GET",
+            path: "/user",
+            status: response.error !== undefined ? 409 : 201,
+        };
+
+        log(response, url);
         return res.json(response);
     },
 };
@@ -119,7 +142,6 @@ const _update = {
     password: async (req, res) => {
         const user = new User(req.body);
         const response = await user.updatePassword();
-        console.log(response);
 
         const url = {
             method: "Patch",
@@ -154,7 +176,19 @@ const _update = {
 
 // Delete 요청 처리
 const _delete = {
-    
+    user: async (req, res) => {
+        const user = new User(req.body);
+        const response = await user.deleteUser();
+
+        const url = {
+            method: "Delete",
+            path: "/user",
+            status: response.error !== undefined ? 409 : 201,
+        };
+
+        log(response, url);
+        return res.status(url.status).json(response);
+    },
 };
 
 module.exports = {

@@ -3,11 +3,11 @@
 const db = require("../../config/db");
 
 class UserStorage {
-    static getUserInfo(id) {
+    static getUserInfo(login_id) {
         return new Promise((resolve, reject) => {
             let query = "select * from user where login_id = ?;";
 
-            db.query(query, [id], (error, results, fields) => {
+            db.query(query, [login_id], (error, results, fields) => {
                 if (error) reject(error);
                 else resolve(results[0]);
             })
@@ -43,6 +43,17 @@ class UserStorage {
             db.query(query, [login_id, name, adress, phone_number, gender, age, id], (error, results, fields) => {
                 if (error) reject(error);
                 else resolve({ success: true });
+            })
+        })
+    }
+
+    static async deleteUser(id) {
+        return new Promise((resolve, reject) => {
+            let query = "delete from user where id = ?;";
+
+            db.query(query, [id], (error, results, fields) => {
+                if (error) reject(error);
+                else resolve({ success: true, msg: "탈퇴 완료" });
             })
         })
     }
