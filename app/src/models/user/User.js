@@ -164,6 +164,12 @@ class User {
     async updateUser() {
         const client = this.body; // accessToken, login_id, name, adress, phone_number, gender, age
 
+        client.login_id = client.login_id.replace(/\s/g, "");
+        client.name = client.name.trim();
+
+        if (!client.login_id) return { success: false, msg: "로그인 아이디를 입력해주세요." };
+        if (!client.name) return { success: false, msg: "이름을 입력해주세요." };
+
         try {
             const token = client.accessToken;
             const payload = jwt.verify(token, process.env.ACCESS_SECRET);
