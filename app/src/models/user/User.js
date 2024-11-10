@@ -78,7 +78,11 @@ class User {
     async register() {
         const client = this.body;
 
+        client.name = client.name.trim();
+        client.id = client.id.replace(/\s/g, "");
+
         if (!client.id) return { success: false, msg: "아이디를 입력해주세요." };
+        if (!client.name) return { success: false, msg: "이름을 입력해주세요." };
         if (client.password !== client.confirm_password) return { success: false, msg: "비밀번호가 일치하지 않습니다." };
 
         try {
