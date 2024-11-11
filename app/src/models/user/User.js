@@ -198,6 +198,7 @@ class User {
                         return { success: true, msg: "유저정보 변경 완료", accessToken };
                     }
                 } catch (error) {
+                    if (error.errno == 1062) return { success: false, msg: "이미 존재하는 ID입니다." };
                     return { success: false, error };
                 }
             } else {
