@@ -1,10 +1,10 @@
 "use strict";
 
-// login-id, name, adress, phone-number, gender, age
+// login-id, name, address, phone-number, gender, age
 const accessToken = document.querySelector("#token"),
     login_id = document.querySelector("#login-id"),
     user_name = document.querySelector("#name"),
-    adress = document.querySelector("#adress"),
+    address = document.querySelector("#address"),
     phone_number = document.querySelector("#phone-number"),
     gender = document.querySelector("#gender"),
     age = document.querySelector("#age"),
@@ -17,7 +17,7 @@ function login() {
         accessToken: accessToken.value,
         login_id: login_id.value,
         name: user_name.value,
-        adress: adress.value,
+        address: address.value,
         phone_number: phone_number.value,
         gender: gender.value,
         age: age.value,

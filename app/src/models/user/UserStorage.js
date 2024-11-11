@@ -36,11 +36,11 @@ class UserStorage {
         })
     }
 
-    static async updateUser(id, login_id, name, adress, phone_number, gender, age) {
+    static async updateUser(id, login_id, name, address, phone_number, gender, age) {
         return new Promise((resolve, reject) => {
-            let query = "update user set login_id = ?, name = ?, adress = ?, phone_number = ?, gender = ?, age = ? where id = ?;";
+            let query = "update user set login_id = ?, name = ?, address = ?, phone_number = ?, gender = ?, age = ? where id = ?;";
 
-            db.query(query, [login_id, name, adress, phone_number, gender, age, id], (error, results, fields) => {
+            db.query(query, [login_id, name, address, phone_number, gender, age, id], (error, results, fields) => {
                 if (error) reject(error);
                 else resolve({ success: true });
             })

@@ -7,7 +7,7 @@ const userCtrl = require("./user.ctrl");
 const optionCtrl = require("./option.ctrl");
 
 // user 관련 API
-// id, login_id, password, adress, name, phone_number, gender, age
+// id, login_id, password, address, name, phone_number, gender, age
 router.get("/", userCtrl._read.home); // 홈페이지 테스트용
 router.get("/login", userCtrl._read.login); // 로그인 테스트용
 router.get("/register", userCtrl._read.register); // 회원가입 테스트용

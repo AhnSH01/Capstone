@@ -166,7 +166,7 @@ class User {
     }
 
     async updateUser() {
-        const client = this.body; // accessToken, login_id, name, adress, phone_number, gender, age
+        const client = this.body; // accessToken, login_id, name, address, phone_number, gender, age
 
         client.login_id = client.login_id.replace(/\s/g, "");
         client.name = client.name.trim();
@@ -182,7 +182,7 @@ class User {
             if (user) {
                 try {
                     let result = await UserStorage.updateUser(
-                        user.id, client.login_id, client.name, client.adress, client.phone_number, client.gender, client.age
+                        user.id, client.login_id, client.name, client.address, client.phone_number, client.gender, client.age
                     );
                     if (result.success) {
                         // access token 재발급
