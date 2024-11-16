@@ -48,7 +48,10 @@ class Option {
         client.theme = client.puthemesh.replace(/\s/g, "");
         client.language = client.puslanguageh.replace(/\s/g, "");
 
-        if (!client.push == "ON" && !client.push == "OFF" ) return { success: false, msg: "잘못된 푸쉬 옵션입니다. (ON 또는 OFF)" };
+        if (client.push == "ON") client.push = true;
+        else if (client.push == "OFF" ) client.push = false;
+        else return { success: false, msg: "잘못된 푸쉬 옵션입니다. (ON 또는 OFF)" };
+
         if (!client.theme) return { success: false, msg: "테마를 입력해주세요." };
         if (!client.language) return { success: false, msg: "언어를 입력해주세요." };
 
