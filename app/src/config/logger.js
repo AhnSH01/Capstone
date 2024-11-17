@@ -45,4 +45,19 @@ if (process.env.NODE_ENV !== "production") {
     logger.add(opts.console);
 }
 
-module.exports = logger;
+
+// log 처리
+const log = (response, url) => {
+    if (response.error) {
+        logger.error(
+            `${url.method} ${url.path} ${url.status} "Response: { success: ${response.success}, ${response.error} }"`
+        );
+    }
+    else {
+        logger.info(
+            `${url.method} ${url.path} ${url.status} "Response: { success: ${response.success}, msg: ${response.msg} }"`
+        );
+    }
+};
+
+module.exports = { logger, log };

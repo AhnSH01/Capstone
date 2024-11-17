@@ -1,7 +1,7 @@
 "use strict";
 
 const { log } = require("../../config/logger");
-const Option = require("../../models/option/Option");
+const Video = require("../../models/video/Video");
 
 // Get 요청 처리
 const _read = {
@@ -54,8 +54,26 @@ const _update = {
     },
 };
 
+// Delete 요청 처리
+const _delete = {
+    user: async (req, res) => {
+        const user = new User(req.body);
+        const response = await user.deleteUser();
+
+        const url = {
+            method: "Delete",
+            path: "/user",
+            status: response.error !== undefined ? 409 : 201,
+        };
+
+        log(response, url);
+        return res.status(url.status).json(response);
+    },
+};
+
 module.exports = {
     _read,
     _create,
     _update,
+    _delete,
 };

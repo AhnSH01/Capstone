@@ -1,21 +1,7 @@
 "use strict";
 
-const logger = require("../../config/logger");
+const { logger, log } = require("../../config/logger");
 const User = require("../../models/user/User");
-
-// log 처리
-const log = (response, url) => {
-    if (response.error) {
-        logger.error(
-            `${url.method} ${url.path} ${url.status} "Response: { success: ${response.success}, ${response.error} }"`
-        );
-    }
-    else {
-        logger.info(
-            `${url.method} ${url.path} ${url.status} "Response: { success: ${response.success}, msg: ${response.msg} }"`
-        );
-    }
-};
 
 // Get 요청 처리
 const _read = {

@@ -5,6 +5,7 @@ const router = express.Router();
 
 const userCtrl = require("./user.ctrl");
 const optionCtrl = require("./option.ctrl");
+const videoCtrl = require("./video.ctrl");
 
 // user 관련 API
 // id, login_id, password, address, name, phone_number, gender, age
@@ -37,5 +38,16 @@ router.patch("/option", optionCtrl._update.option); // options 정보 변경
 
 // router.delete("/option", optionCtrl._delete.option); // options 정보 삭제
 // options 테이블 user_id가 user의 id 참조하고 있고 설정에서 외래키 삭제시 같이 삭제해놔서 필요없을듯
+
+
+// video 관련 API
+// id, user_id, date, S3_URL
+// router.get("/video", videoCtrl._read.video); // video 정보 반환
+
+// router.post("/video", videoCtrl._create.video); // video 정보 생성
+
+// router.patch("/video", videoCtrl._update.video); // video 정보 변경
+
+// router.delete("/video", videoCtrl._delete.video); // video 정보 변경
 
 module.exports = router;
