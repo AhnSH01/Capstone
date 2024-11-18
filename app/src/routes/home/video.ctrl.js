@@ -5,13 +5,26 @@ const Video = require("../../models/video/Video");
 
 // Get 요청 처리
 const _read = {
-    option: async (req, res) => {
-        const option = new Option(req.query);
-        const response = await option.getOption();
+    video: async (req, res) => {
+        const video = new Video(req.query);
+        const response = await video.getVideo();
 
         const url = {
             method: "GET",
-            path: "/option",
+            path: "/video",
+            status: response.error ? 409 : 201,
+        };
+
+        log(response, url);
+        return res.json(response);
+    },
+    videoByDate: async (req, res) => {
+        const video = new Video(req.query);
+        const response = await video.getVideoByDate();
+
+        const url = {
+            method: "GET",
+            path: "/video/date",
             status: response.error ? 409 : 201,
         };
 
@@ -22,13 +35,13 @@ const _read = {
 
 // Post 요청 처리
 const _create = {
-    option: async (req, res) => {
-        const option = new Option(req.body);
-        const response = await option.createOption();
+    video: async (req, res) => {
+        const video = new Video(req.body);
+        const response = await video.createVideo();
 
         const url = {
             method: "POST",
-            path: "/option",
+            path: "/video",
             status: response.error ? 409 : 201,
         };
 
@@ -39,13 +52,13 @@ const _create = {
 
 // Patch 요청 처리
 const _update = {
-    option: async (req, res) => {
-        const option = new Option(req.body);
-        const response = await option.updateOption();
+    video: async (req, res) => {
+        const video = new Video(req.body);
+        const response = await video.updateVideo();
 
         const url = {
             method: "Patch",
-            path: "/option",
+            path: "/video",
             status: response.error ? 409 : 201,
         };
 
@@ -56,13 +69,13 @@ const _update = {
 
 // Delete 요청 처리
 const _delete = {
-    user: async (req, res) => {
-        const user = new User(req.body);
-        const response = await user.deleteUser();
+    video: async (req, res) => {
+        const video = new Video(req.body);
+        const response = await video.deleteVideo();
 
         const url = {
             method: "Delete",
-            path: "/user",
+            path: "/video",
             status: response.error !== undefined ? 409 : 201,
         };
 

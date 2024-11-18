@@ -42,12 +42,13 @@ router.patch("/option", optionCtrl._update.option); // options 정보 변경
 
 // video 관련 API
 // id, user_id, date, S3_URL
-// router.get("/video", videoCtrl._read.video); // video 정보 반환
+router.get("/video", videoCtrl._read.video); // 모든 video 정보 반환
+router.get("/video/date", videoCtrl._read.videoByDate); // 특정 날짜의 video 정보 반환
 
-// router.post("/video", videoCtrl._create.video); // video 정보 생성
+router.post("/video", videoCtrl._create.video); // video 정보 생성
 
-// router.patch("/video", videoCtrl._update.video); // video 정보 변경
+router.patch("/video", videoCtrl._update.video); // video 정보 변경
 
-// router.delete("/video", videoCtrl._delete.video); // video 정보 변경
+router.delete("/video", videoCtrl._delete.video); // video 정보 삭제
 
 module.exports = router;
