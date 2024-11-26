@@ -45,8 +45,8 @@ class Option {
     async updateOption() {
         const client = this.body; // accessToken, push, theme, language
 
-        client.theme = client.puthemesh.replace(/\s/g, "");
-        client.language = client.puslanguageh.replace(/\s/g, "");
+        client.theme = client.theme.replace(/\s/g, "");
+        client.language = client.language.replace(/\s/g, "");
 
         if (client.push == "ON") client.push = true;
         else if (client.push == "OFF" ) client.push = false;
