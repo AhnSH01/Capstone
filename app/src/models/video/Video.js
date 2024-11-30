@@ -57,7 +57,7 @@ class Video {
         if (!client.size) return { success: false, msg: "size을 입력해주세요." };
 
         try {
-            return await VideoStorage.save(client.id, client.bucket, client.key, client.size);
+            return await VideoStorage.save(client.id, client.bucket, client.key, parseFloat(client.size));
         } catch (error) {
             return { success: false, error };
         }
