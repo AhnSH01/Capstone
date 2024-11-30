@@ -25,11 +25,11 @@ class VideoStorage {
         })
     }
 
-    static async save(id, S3_URL) {
+    static async save(id, bucket, key, size) {
         return new Promise((resolve, reject) => {
-            let query = "insert into video (user_id, S3_URL) VALUES (?, ?);";
+            let query = "insert into video (user_id, bucket, key, size) VALUES (?, ?, ?, ?);";
 
-            db.query(query, [id, S3_URL], (error, results, fields) => {
+            db.query(query, [id, bucket, key, size], (error, results, fields) => {
                 if (error) reject(error);
                 else resolve({ success: true, msg: `user${id} 비디오정보 생성 완료` });
             })
