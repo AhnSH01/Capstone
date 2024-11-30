@@ -27,7 +27,7 @@ class VideoStorage {
 
     static async save(id, bucket, key, size) {
         return new Promise((resolve, reject) => {
-            let query = "insert into video (user_id, bucket, key, size) VALUES (?, ?, ?, ?);";
+            let query = "insert into video (user_id, bucket, file_key, size) VALUES (?, ?, ?, ?);";
 
             db.query(query, [id, bucket, key, size], (error, results, fields) => {
                 console.log(query);
