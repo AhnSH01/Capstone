@@ -30,6 +30,7 @@ class VideoStorage {
             let query = "insert into video (user_id, bucket, key, size) VALUES (?, ?, ?, ?);";
 
             db.query(query, [id, bucket, key, size], (error, results, fields) => {
+                console.log(query);
                 if (error) reject(error);
                 else resolve({ success: true, msg: `user${id} 비디오정보 생성 완료` });
             })
