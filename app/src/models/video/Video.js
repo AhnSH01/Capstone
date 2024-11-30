@@ -49,18 +49,19 @@ class Video {
     }
 
     async createVideo() {
-        const client = this.body; // accessToken, S3_URL
+        const client = this.body; // id, S3_URL
 
-        if (!client.S3_URL) return { success: false, msg: "S3_URL을 입력해주세요." };
+        console.log(client);
+        return { success: true, msg: "테스트 성공" };
 
-        try {
-            const token = client.accessToken;
-            const payload = jwt.verify(token, process.env.ACCESS_SECRET);
+        // if (!client.id) return { success: false, msg: "user의 id를 입력해주세요." };
+        // if (!client.S3_URL) return { success: false, msg: "S3_URL을 입력해주세요." };
 
-            return await VideoStorage.save(payload.id, client.S3_URL);
-        } catch (error) {
-            return { success: false, error };
-        }
+        // try {
+        //     return await VideoStorage.save(client.id, client.S3_URL);
+        // } catch (error) {
+        //     return { success: false, error };
+        // }
     }
 
     async updateVideo() {
