@@ -6,6 +6,7 @@ const router = express.Router();
 const userCtrl = require("./user.ctrl");
 const optionCtrl = require("./option.ctrl");
 const videoCtrl = require("./video.ctrl");
+const S3Ctrl = require("./S3.ctrl");
 
 // user 관련 API
 // id, login_id, password, address, name, phone_number, gender, age
@@ -50,5 +51,8 @@ router.post("/video", videoCtrl._create.video); // video 정보 생성
 router.patch("/video", videoCtrl._update.video); // video 정보 변경
 
 router.delete("/video", videoCtrl._delete.video); // video 정보 삭제
+
+// S3 관련 API
+router.post('/upload', express.raw({type: 'application/octet-stream', limit: '10mb'}, S3Ctrl._create.upload));
 
 module.exports = router;
