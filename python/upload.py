@@ -245,6 +245,25 @@ def periodic_upload():
             print(f"Upload error: {e}")
             time.sleep(1)
 
+def log_stderr():
+            progress_line = ""
+            while is_streaming:
+                char = ffmpeg_process.stderr.read(1)
+                if not char:
+                    break
+                try:
+                    char = char.decode()
+                    if char == '\r' or char == '\n':
+                        if "fps=" in progress_line:
+                            print(f"\rFFmpeg 진행: {progress_line.strip()}", end='', flush=True)
+                        elif progress_line.strip():
+                            print(f"\nFFmpeg: {progress_line.strip()}")
+                        progress_line = ""
+                    else:
+                        progress_line += char
+                except Exception:
+                    pass
+                
 @app.route("/start_hls", methods=["POST"])
 def start_hls():
     global ffmpeg_process, is_streaming, stream_start_time
@@ -257,9 +276,6 @@ def start_hls():
         is_streaming = True
         stream_start_time = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
-        print(f"스트리밍 시작 - URL: {STREAM_URL}")
-
-        # FFmpeg 명령어 생성 - 파이프 입력 처리
         ffmpeg_cmd = (
             ffmpeg
             .input(
@@ -278,7 +294,7 @@ def start_hls():
                 hls_time=10,
                 hls_list_size=0,
                 hls_flags='append_list',
-                hls_segment_filename=os.path.join(HLS_OUTPUT_DIR, "segment_%03d.ts"),
+                hls_segment_filename=os.path.join(HLS_OUTPUT_DIR, "segment_%05d.ts"),
                 hls_segment_type='mpegts',
                 force_key_frames='expr:gte(t,n_forced*10)',
                 g=100,
@@ -288,32 +304,7 @@ def start_hls():
             .overwrite_output()
         )
 
-        # FFmpeg 명령어 출력
-        print("FFmpeg 명령어:")
-        print(' '.join(ffmpeg_cmd.compile()))
-
-        # FFmpeg 실행 (stderr만 파이프로 받기)
         ffmpeg_process = ffmpeg_cmd.run_async(pipe_stderr=True)
-
-        # stderr을 읽는 스레드
-        def log_stderr():
-            progress_line = ""
-            while is_streaming:
-                char = ffmpeg_process.stderr.read(1)
-                if not char:
-                    break
-                try:
-                    char = char.decode()
-                    if char == '\r' or char == '\n':
-                        if "fps=" in progress_line:
-                            print(f"\rFFmpeg 진행: {progress_line.strip()}", end='', flush=True)
-                        elif progress_line.strip():
-                            print(f"\nFFmpeg: {progress_line.strip()}")
-                        progress_line = ""
-                    else:
-                        progress_line += char
-                except Exception:
-                    pass
 
         stderr_thread = threading.Thread(target=log_stderr, daemon=True)
         stderr_thread.start()
@@ -321,7 +312,6 @@ def start_hls():
         upload_thread = threading.Thread(target=periodic_upload, daemon=True)
         upload_thread.start()
         
-        print("스트리밍 시작됨")
         return jsonify({"message": "HLS streaming started"}), 200
     except Exception as e:
         is_streaming = False
