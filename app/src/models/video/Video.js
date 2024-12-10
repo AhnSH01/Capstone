@@ -67,7 +67,10 @@ class Video {
             const second = dateStr.substring(13, 15);
             const datetime = `${year}-${month}-${day} ${hour}:${minute}:${second}`;
 
-            return await VideoStorage.save(client.id, datetime, client.bucket, client.key, client.region, client.size);
+            // key에서 segment_xxxxx.ts를 stream.m3u8로 변경
+            const key = client.key.split('/')[0] + '/stream.m3u8';
+
+            return await VideoStorage.save(client.id, datetime, client.bucket, key, client.region, client.size);
         } catch (error) {
             return { success: false, error };
         }
