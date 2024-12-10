@@ -16,20 +16,20 @@ class VideoStorage {
 
     static getVideoInfoByDate(id, date) {
         return new Promise((resolve, reject) => {
-            let query = "select * from video where user_id = ? and date = ?;";
+            let query = "select * from video where user_id = ? and DATE(datetime) = ?;";
 
             db.query(query, [id, date], (error, results, fields) => {
                 if (error) reject(error);
-                else resolve(results[0]);
+                else resolve(results);
             })
         })
     }
 
-    static async save(id, bucket, key, size) {
+    static async save(id, datetime, bucket, key, resion, size) {
         return new Promise((resolve, reject) => {
-            let query = "insert into video (user_id, bucket, file_key, size) VALUES (?, ?, ?, ?);";
+            let query = "insert into video (user_id, datetime, bucket, file_key, resion, size) VALUES (?, ?, ?, ?, ?, ?);";
 
-            db.query(query, [id, bucket, key, size], (error, results, fields) => {
+            db.query(query, [id, datetime, bucket, key, resion, size], (error, results, fields) => {
                 console.log(query);
                 if (error) reject(error);
                 else resolve({ success: true, msg: `user${id} 비디오정보 생성 완료` });
@@ -39,7 +39,7 @@ class VideoStorage {
 
     static async updateVideo(id, date, S3_URL) {
         return new Promise((resolve, reject) => {
-            let query = "update video set S3_URL = ? where user_id = ? and date = ?;";
+            let query = "update video set S3_URL = ? where user_id = ? and DATE(datetime) = ?;";
 
             db.query(query, [S3_URL, id, date], (error, results, fields) => {
                 if (error) reject(error);
@@ -50,7 +50,7 @@ class VideoStorage {
 
     static async deleteVideo(id, date) {
         return new Promise((resolve, reject) => {
-            let query = "delete from video where user_id = ? and date = ?;";
+            let query = "delete from video where user_id = ? and DATE(datetime) = ?;";
 
             db.query(query, [id, date], (error, results, fields) => {
                 if (error) reject(error);
