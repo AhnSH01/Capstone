@@ -214,11 +214,8 @@ def periodic_upload():
     while is_streaming:
         try:
             current_files = os.listdir(HLS_OUTPUT_DIR)
-            ts_count = len([f for f in current_files if f.endswith('.ts')])
-            if ts_count > 0:
-                print(f"현재 TS 파일 수: {ts_count}")
-
-            # TS 파일 처리
+            
+            # TS 파일 처리 - 메타데이터 없이 기본 업로드
             ts_files = sorted([f for f in current_files if f.endswith('.ts')])
             for ts_file in ts_files:
                 if not is_streaming:
@@ -231,11 +228,19 @@ def periodic_upload():
                 except Exception as e:
                     print(f"Error uploading {ts_file}: {e}")
             
-            # m3u8 파일 처리
             m3u8_file_path = os.path.join(HLS_OUTPUT_DIR, "stream.m3u8")
             if os.path.exists(m3u8_file_path):
                 try:
-                    my_bucket.upload_file(m3u8_file_path, f"{stream_start_time}/stream.m3u8")
+                    extra_args = {
+                        'Metadata': {
+                            'id': '76'
+                        }
+                    }
+                    my_bucket.upload_file(
+                        m3u8_file_path, 
+                        f"{stream_start_time}/stream.m3u8",
+                        ExtraArgs=extra_args
+                    )
                 except Exception as e:
                     print(f"Error uploading stream.m3u8: {e}")
             
