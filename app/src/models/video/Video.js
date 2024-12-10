@@ -49,11 +49,11 @@ class Video {
     }
 
     async createVideo() {
-        const client = this.body; // id, bucket, key, resion, size
+        const client = this.body; // id, bucket, key, region, size
 
         if (!client.id) return { success: false, msg: "user의 id를 입력해주세요." };
         if (!client.bucket) return { success: false, msg: "bucket을 입력해주세요." };
-        if (!client.resion) return { success: false, msg: "resion 입력해주세요." };
+        if (!client.region) return { success: false, msg: "region 입력해주세요." };
         if (!client.key) return { success: false, msg: "key을 입력해주세요." };
         if (!client.size) return { success: false, msg: "size을 입력해주세요." };
 
@@ -67,7 +67,7 @@ class Video {
             const second = dateStr.substring(13, 15);
             const datetime = `${year}-${month}-${day} ${hour}:${minute}:${second}`;
 
-            return await VideoStorage.save(client.id, datetime, client.bucket, client.key, client.resion, client.size);
+            return await VideoStorage.save(client.id, datetime, client.bucket, client.key, client.region, client.size);
         } catch (error) {
             return { success: false, error };
         }
